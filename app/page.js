@@ -1,10 +1,14 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import ThreeDBackground from '@/components/3d-background';
 import { ArrowRight, Sparkles, Zap, Rocket, Code, Palette, Monitor } from 'lucide-react';
+
+const ThreeDBackground = dynamic(() => import('@/components/3d-background'), {
+  ssr: false,
+});
 
 export default function Home() {
   const features = [
