@@ -23,7 +23,11 @@ export async function POST(request) {
 
     await dbConnect();
 
-    const receipt = `receipt_${uuid()}`;
+    // Generate a shorter receipt ID (max 40 chars)
+    const timestamp = Date.now().toString().slice(-8);
+    const random = Math.random().toString(36).substring(2, 8);
+    const receipt = `rcpt_${timestamp}_${random}`;
+
     const amountInPaisa = Math.floor(amount * 100); // Convert to paisa
 
     const razorpayOrder = await razorpayInstance.orders.create({
