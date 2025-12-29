@@ -1,21 +1,34 @@
 'use client';
 
-import { ReactLenis } from '@studio-freight/react-lenis';
+import { useEffect, useRef } from 'react';
+import Lenis from '@studio-freight/lenis';
 
 export default function LenisProvider({ children }) {
-  return (
-    <ReactLenis
-      root
-      options={{
-        lerp: 0.1,
-        duration: 1.2,
-        smoothWheel: true,
-        smoothTouch: false,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
-      }}
-    >
-      {children}
-    </ReactLenis>
-  );
+  const lenisRef = useRef(null);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.1,
+      duration: 1.2,
+      smoothWheel: true,
+      smoothTouch: false,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  return <>{children}</>;
 }
